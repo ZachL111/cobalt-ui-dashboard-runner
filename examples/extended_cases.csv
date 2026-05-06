@@ -1,0 +1,7 @@
+name,demand,capacity,latency,risk,weight,score,decision,reason
+baseline,67,90,15,11,6,143,review,frontend apps baseline scenario exercises the review path for bounded failure handling
+pressure,80,76,30,21,10,70,review,frontend apps pressure scenario exercises the review path for bounded failure handling
+surge,106,95,18,17,13,216,accept,frontend apps surge scenario keeps the local fixture within the modeled acceptance band
+degraded,73,55,31,27,8,-14,review,frontend apps degraded scenario exercises the review path for bounded failure handling
+recovery,93,105,18,13,10,209,accept,frontend apps recovery scenario keeps the local fixture within the modeled acceptance band
+boundary,79,84,24,17,10,118,review,frontend apps boundary scenario exercises the review path for bounded failure handling
