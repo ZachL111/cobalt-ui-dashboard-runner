@@ -1,68 +1,40 @@
 # cobalt-ui-dashboard-runner
 
-`cobalt-ui-dashboard-runner` explores frontend apps in Lua. The repository keeps the core rule set compact, then surrounds it with examples that show how the decisions move.
-
-## Cobalt UI Dashboard Runner Notes
-
-The quickest review path is the verifier first, then the fixtures, then the operations note. That order makes it easy to see whether the code, data, and explanation still agree.
+`cobalt-ui-dashboard-runner` explores frontend apps with a small Lua codebase and local fixtures. The technical goal is to develop a Lua command-oriented project for dashboard scenarios with deny and allow fixtures, explainable decision traces, and no production deployment claims.
 
 ## Why This Exists
 
-This project keeps the domain idea close to the tests. That makes it useful as a reference implementation, a small experiment, or a starting point for a more specialized tool.
+The point is to make a small domain rule concrete enough that a reader can change it and immediately see what broke.
 
-## Example Scenarios
+## Cobalt UI Dashboard Runner Review Notes
 
-`degraded` is the first example I would inspect because it lands on the `review` path with a score of -14. The broader file also keeps `degraded` at -14 and `surge` at 216, which gives the model a useful low-to-high spread.
+Start with `interaction cost` and `view drift`. Those cases create the widest score spread in this repo, so they are the best quick check when the model changes.
 
-## Implementation Notes
+## Capabilities
 
-The project is organized around a compact model rather than a large framework. Inputs are scored, classified, and checked against golden fixtures. The constants live in code and are mirrored in metadata so documentation drift is easy to catch. The Lua project keeps the module shape simple and validates behavior through a direct script.
+- `fixtures/domain_review.csv` adds cases for view drift and state pressure.
+- `metadata/domain-review.json` records the same cases in structured form.
+- `config/review-profile.json` captures the read order and the two review questions.
+- `examples/cobalt-ui-dashboard-walkthrough.md` walks through the case spread.
+- The Lua code includes a review path for `interaction cost` and `view drift`.
+- `docs/field-notes.md` explains the strongest and weakest cases.
 
-## Feature Notes
+## Implementation Shape
 
-- Models view models with deterministic scoring and explicit review decisions.
-- Uses fixture data to keep interaction state changes visible in code review.
-- Includes extended examples for layout checks, including `surge` and `degraded`.
-- Documents fixture data tradeoffs in `docs/operations.md`.
-- Runs locally with a single verification command and no external credentials.
+The fixture data drives the tests. The code stays thin, while `metadata/domain-review.json` and `config/review-profile.json` explain what each case is meant to protect.
 
-## Try It
+The Lua code keeps the review rule close to the tests.
+
+## Local Usage
 
 ```powershell
 powershell -NoProfile -ExecutionPolicy Bypass -File scripts/verify.ps1
 ```
 
-This runs the language-level build or test path against the compact fixture set.
+## Verification
 
-## Tests
-
-```powershell
-powershell -NoProfile -ExecutionPolicy Bypass -File scripts/audit.ps1
-```
-
-The audit command checks repository structure and README constraints before it delegates to the verifier.
-
-## Code Tour
-
-- `src`: primary implementation
-- `tests`: verification harness
-- `fixtures`: compact golden scenarios
-- `examples`: expanded scenario set
-- `metadata`: project constants and verification metadata
-- `docs`: operations and extension notes
-- `scripts`: local verification and audit commands
+The verifier is intentionally local. It should fail if the fixture score math, lane assignment, or language-specific test drifts.
 
 ## Roadmap
 
-- Add a loader for `examples/extended_cases.csv` and promote selected cases into the language test suite.
-- Add a short report command that prints the score breakdown for a single scenario.
-- Add malformed input fixtures so the failure path is as visible as the happy path.
-- Add one more frontend apps fixture that focuses on a malformed or borderline input.
-
-## Boundaries
-
-This code is local-first. It makes no claim about deployed usage and avoids credentials, hosted state, and environment-specific setup.
-
-## Local Setup
-
-The only required setup is the local Lua toolchain. After cloning, stay in the repo root so fixture paths resolve correctly.
+This remains a local project with deterministic fixtures. It does not depend on credentials, hosted services, or live data. Future work should add richer malformed inputs before widening the public API.
